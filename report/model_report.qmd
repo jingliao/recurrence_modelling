@@ -1,5 +1,151 @@
 ---
-title: "model_report"
+title: "Recurrence Prediction Model"
 format: html
 ---
+
+# 1. Problem definition
+
+This project amis to predict whether an individual will experience a recurrence event within 180 days, based on information from their first episode. The goal is to explore how different feature representations affect model performance and interpretability.
+
+---
+
+# 2. Data simulation
+
+The dataset is simulated to reflect a simplified event-based system.
+
+- Each individual is assigned a risk level (low, medium, high)
+- Recurrence probability is driven primarily by risk level
+- Episode duration is generated independently
+
+```{r}
+
+source("../R/simulate_data.R")
+
+df <- simulate_events()
+
+head(df)
+```
+
+# 3. Feature engineering
+
+Two types of features are created:
+
+- Continuous: episode duration
+- Categorical: episode type (short, medium and long)
+
+```{r}
+
+source("../R/feature_engineering.R")
+
+df_feat <- create_features(df)
+
+head(df_feat)
+
+```
+
+# 4. Model specification
+
+Two logistic regression models are compared:
+
+- Model A: continuous duration
+- Model B: categorical duration
+
+```{r}
+
+source("../R/model.R")
+
+model_cont <- fit_model_continuous(df_feat)
+model_cat <- fit_model_categorical(df_feat)
+
+```
+
+# 5. Model evaluation
+
+```{r}
+
+df_pred_cont <- add_prediction(df_feat, model_cont)
+res_cont <- evaluate_model(df_pred_cont)
+
+df_pred_cat <- add_prediction(df_feat, model_cat)
+res_cat <- evaluate_model(df_pred_cat)
+
+res_cont$accuracy
+res_cat$accuracy
+
+res_cont$baseline_accuracy
+
+```
+
+## 1. Recurrence rate by risk level
+
+Recurrence increases clearly with risk level, confirming that risk is the primary driver in this dataset.
+
+```{r}
+
+library(ggplot2)
+
+df_plot <- df_feat |>
+  group_by(risk_level) |>
+  summarise(recur_rate = mean(y_recur_within_180),
+            n = n())
+
+ggplot(df_plot,
+       aes(x = risk_level,
+           y = recur_rate)
+       ) +
+  geom_col() +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Recurrence rate by risk level",
+       x = "Risk level",
+       y = "Recurrence %")
+
+```
+
+## 2. Predicted probability distribution
+
+The model assigns higher predicted probabilities to actual recurrence cases, indicating it captures meaningful signal.
+
+```{r}
+
+ggplot(df_pred_cont,
+       aes(x = pred_prob,
+           fill = factor(y_recur_within_180))
+       ) +
+  geom_histogram(position = "identity",
+                 alpha = 0.5,
+                 bins = 30) +
+  labs(title = "Predicted probability distribution",
+       x = "Predicted probability",
+       fill = "Actual outcome")
+
+```
+
+# 6. Key findings
+
+Both models produced similar performance. This suggests that:
+
+- Risk level is the primary driver of recurrence
+- Episode duration (both continuous and categorical) does not add meaningful predictive signal in this setup
+
+# 7. Interpretation
+
+This result is expected given the data generating process:
+
+- Recurrence probability is determined by risk level
+- Episode duration is randomly generated
+
+Therefore, duration acts as noise rather than signal.
+
+# 8. Conclusion
+
+This project demonstrates:
+
+- How to structure a prediction problem from event data
+- The imporance of feature design and representation
+- The need to evaluate models against baseline performance
+
+Even when additional features are included, they must carry real signal to improve predictive performance.
+
+This is a modelling project that explores how feature representation affects recurrence prediction, highlighting the importance of signal versus noise.
+
 
