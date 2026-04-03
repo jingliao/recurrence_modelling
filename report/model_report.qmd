@@ -5,7 +5,7 @@ format: html
 
 # 1. Problem definition
 
-This project amis to predict whether an individual will experience a recurrence event within 180 days, based on information from their first episode. The goal is to explore how different feature representations affect model performance and interpretability.
+This project aims to predict whether an individual will experience a recurrence event within 180 days, based on information from their first episode. The goal is to explore how different feature representations affect model performance and interpretability.
 
 ---
 
@@ -13,9 +13,16 @@ This project amis to predict whether an individual will experience a recurrence 
 
 The dataset is simulated to reflect a simplified event-based system.
 
-- Each individual is assigned a risk level (low, medium, high)
-- Recurrence probability is driven primarily by risk level
-- Episode duration is generated independently
+- Each individual is assigned a risk level (low, medium, high) using replaced random sampling with probability: 0.5, 0.3, and 0.2, respectively
+- Recurrence probability is driven primarily by risk level with an assumption of positive relationship between risk level and recurrence probability. Thus, recurrence probability assumes to be 0.2 for low risk level, 0.4 for medium risk level, and 0.7 for high risk level
+- A binary outcome of whether an event will recur is defined using a binomial sampling with the recurrence probability
+- First episode start dates are sampled randomly between 1/1/2022 and 31/12/2022
+- The duration days of first episode events are generated independently and within 10 days, and hence the end date of the first episode events is the episode start dates plus the first episode duration days
+- Second episode start dates are defined to be the first episode end date + gap days if the binary outcome of whether an event will recur is 1, where gap days are sampled randomly within 10 and 180 days
+- the response binary variable, y, whether an individual will have an recurred event is defined to be 1 if:
+  i. first episode start date is not null, and
+  ii. the time window between first episode end date and second episode start date is smaller than or equal to 180 days,
+  otherwise, y = 0
 
 ```{r}
 
@@ -31,7 +38,7 @@ head(df)
 Two types of features are created:
 
 - Continuous: episode duration
-- Categorical: episode type (short, medium and long)
+- Categorical: episode type (short, medium and long) to relate the episode duration (3, 6 and larger than 6 days)
 
 ```{r}
 
@@ -47,8 +54,8 @@ head(df_feat)
 
 Two logistic regression models are compared:
 
-- Model A: continuous duration
-- Model B: categorical duration
+- Model A (continuous duration): P(y = 1 | data) = f(risk_level, episode_first_duration)
+- Model B (categorical duration): P(y = 1 | data) = f(risk_level, episode type)
 
 ```{r}
 
@@ -61,6 +68,7 @@ model_cat <- fit_model_categorical(df_feat)
 
 # 5. Model evaluation
 
+- For simplicity, models are evaluated on the same dataset used for training. In a production setting, it should separate training and test data to avoid optimistic bias.
 ```{r}
 
 df_pred_cont <- add_prediction(df_feat, model_cont)
@@ -76,7 +84,7 @@ res_cont$baseline_accuracy
 
 ```
 
-## 1. Recurrence rate by risk level
+## Recurrence rate by risk level
 
 Recurrence increases clearly with risk level, confirming that risk is the primary driver in this dataset.
 
@@ -101,7 +109,7 @@ ggplot(df_plot,
 
 ```
 
-## 2. Predicted probability distribution
+## Predicted probability distribution
 
 The model assigns higher predicted probabilities to actual recurrence cases, indicating it captures meaningful signal.
 
@@ -134,18 +142,16 @@ This result is expected given the data generating process:
 - Recurrence probability is determined by risk level
 - Episode duration is randomly generated
 
-Therefore, duration acts as noise rather than signal.
+Therefore, episode duration does not carry predictive signal and behaves as noise.
 
 # 8. Conclusion
 
 This project demonstrates:
 
 - How to structure a prediction problem from event data
-- The imporance of feature design and representation
+- The importance of feature design and representation
 - The need to evaluate models against baseline performance
 
 Even when additional features are included, they must carry real signal to improve predictive performance.
 
 This is a modelling project that explores how feature representation affects recurrence prediction, highlighting the importance of signal versus noise.
-
-
