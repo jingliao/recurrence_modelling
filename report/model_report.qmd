@@ -84,6 +84,8 @@ res_cont$baseline_accuracy
 
 ```
 
+# 6. Visualisation
+
 ## Recurrence rate by risk level
 
 Recurrence increases clearly with risk level, confirming that risk is the primary driver in this dataset.
@@ -128,14 +130,14 @@ ggplot(df_pred_cont,
 
 ```
 
-# 6. Key findings
+# 7. Key findings
 
 Both models produced similar performance. This suggests that:
 
 - Risk level is the primary driver of recurrence
 - Episode duration (both continuous and categorical) does not add meaningful predictive signal in this setup
 
-# 7. Interpretation
+# 8. Interpretation
 
 This result is expected given the data generating process:
 
@@ -144,7 +146,7 @@ This result is expected given the data generating process:
 
 Therefore, episode duration does not carry predictive signal and behaves as noise.
 
-# 8. Conclusion
+# 9. Conclusions
 
 This project demonstrates:
 
