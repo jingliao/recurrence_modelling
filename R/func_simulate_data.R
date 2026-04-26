@@ -1,7 +1,11 @@
-library(dplyr)
-library(lubridate)
+#################### Header Start ####################
+# Title : function to simulate data 
+# Author: Jing Liao
+# Date created : 22/03/2026
+# Date modified: 26/04/2026
+#################### Header End   ####################
 
-simulate_events <- function(n_person = 500){
+func_simulate_events <- function(n_person = 500){
   
   set.seed(123)
   

@@ -1,15 +1,22 @@
 ---
 title: "Recurrence Prediction Model"
-format: html
+format: 
+  html:
+    toc: TRUE
+    number-sections: TRUE
+execute:
+  echo: FALSE
+  warning: FALSE
+  message: FALSE
 ---
 
-# 1. Problem definition
+# Problem definition
 
 This project aims to predict whether an individual will experience a recurrence event within 180 days, based on information from their first episode. The goal is to explore how different feature representations affect model performance and interpretability.
 
 ---
 
-# 2. Data simulation
+# Data simulation
 
 The dataset is simulated to reflect a simplified event-based system.
 
@@ -26,14 +33,16 @@ The dataset is simulated to reflect a simplified event-based system.
 
 ```{r}
 
-source("../R/simulate_data.R")
+library(here)
 
-df <- simulate_events()
+source(here("R", "load_global_parameters.R"))
+
+df <- func_simulate_events()
 
 head(df)
 ```
 
-# 3. Feature engineering
+# Feature engineering
 
 Two types of features are created:
 
@@ -42,15 +51,13 @@ Two types of features are created:
 
 ```{r}
 
-source("../R/feature_engineering.R")
-
-df_feat <- create_features(df)
+df_feat <- func_create_features(df)
 
 head(df_feat)
 
 ```
 
-# 4. Model specification
+# Model specification
 
 Two logistic regression models are compared:
 
@@ -59,23 +66,21 @@ Two logistic regression models are compared:
 
 ```{r}
 
-source("../R/model.R")
-
-model_cont <- fit_model_continuous(df_feat)
-model_cat <- fit_model_categorical(df_feat)
+model_cont <- func_fit_model_episode(df_feat, continuous_episode = TRUE)
+model_cat <- func_fit_model_episode(df_feat, continuous_episode = FALSE)
 
 ```
 
-# 5. Model evaluation
+# Model evaluation
 
 - For simplicity, models are evaluated on the same dataset used for training. In a production setting, it should separate training and test data to avoid optimistic bias.
 ```{r}
 
-df_pred_cont <- add_prediction(df_feat, model_cont)
-res_cont <- evaluate_model(df_pred_cont)
+df_pred_cont <- func_add_prediction(df_feat, model_cont)
+res_cont <- func_evaluate_model(df_pred_cont)
 
-df_pred_cat <- add_prediction(df_feat, model_cat)
-res_cat <- evaluate_model(df_pred_cat)
+df_pred_cat <- func_add_prediction(df_feat, model_cat)
+res_cat <- func_evaluate_model(df_pred_cat)
 
 res_cont$accuracy
 res_cat$accuracy
@@ -84,7 +89,7 @@ res_cont$baseline_accuracy
 
 ```
 
-# 6. Visualisation
+# Visualisation
 
 ## Recurrence rate by risk level
 
@@ -92,7 +97,6 @@ Recurrence increases clearly with risk level, confirming that risk is the primar
 
 ```{r}
 
-library(ggplot2)
 
 df_plot <- df_feat |>
   group_by(risk_level) |>
@@ -103,7 +107,7 @@ ggplot(df_plot,
        aes(x = risk_level,
            y = recur_rate)
        ) +
-  geom_col() +
+  geom_col(fill = "steelblue") +
   scale_y_continuous(labels = scales::percent) +
   labs(title = "Recurrence rate by risk level",
        x = "Risk level",
@@ -130,14 +134,14 @@ ggplot(df_pred_cont,
 
 ```
 
-# 7. Key findings
+# Key findings
 
 Both models produced similar performance. This suggests that:
 
 - Risk level is the primary driver of recurrence
 - Episode duration (both continuous and categorical) does not add meaningful predictive signal in this setup
 
-# 8. Interpretation
+# Interpretation
 
 This result is expected given the data generating process:
 
@@ -146,7 +150,7 @@ This result is expected given the data generating process:
 
 Therefore, episode duration does not carry predictive signal and behaves as noise.
 
-# 9. Conclusions
+# Conclusions
 
 This project demonstrates:
 
@@ -157,3 +161,11 @@ This project demonstrates:
 Even when additional features are included, they must carry real signal to improve predictive performance.
 
 This is a modelling project that explores how feature representation affects recurrence prediction, highlighting the importance of signal versus noise.
+
+# Supplements
+
+```{r}
+
+source(here("R", "poc_episode_resolution.R"))
+
+```

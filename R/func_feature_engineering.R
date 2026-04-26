@@ -1,6 +1,11 @@
-library(dplyr)
+#################### Header Start ####################
+# Title : functions to create features
+# Author: Jing Liao
+# Date created : 22/03/2026
+# Date modified: 26/04/2026
+#################### Header End   ####################
 
-create_features <- function(df){
+func_create_features <- function(df){
   
   df_feature <- df |>
     # 1. encode categorical

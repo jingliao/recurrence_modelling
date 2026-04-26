@@ -1,13 +1,33 @@
-# Episode recurrence modelling and prediction
+# Metadata
 
-This project demonstrates an end-to-end modelling workflow for predicting recurrence using simulated event data. 
-The goal is not to build a production-ready model, but to illustrate how modelling decisions relate to the underlying data generating process.
+Project : Incident Episode Recurrence Modelling and Prediction
+Author  : Jing Liao
+Last updated date  : 26-04-2026
+Stakeholders       : humans
 
-## Methodology
 
-The workflow consists of four main steps:
+## 1. Purpose
 
-### 1. Data Simulation
+This project demonstrates an end-to-end reporting workflow using R, including data preparation, analysis, and multiple reporting outputs 
+(e.g. html, word file and a Shiny app).
+
+There are two objectives for this project: i) to show results of a proof-of-concept network method to link events recorded across sources as episodes, 
+and ii) to demonstrates an end-to-end modelling workflow for predicting episode recurrence using simulated event data. It is not to build a production-ready model, 
+but to illustrate how modelling decisions relate to the underlying data generating process.
+
+## 2. Dependencies
+
+- R version 4.5.0
+- Required R packages, details see R/
+
+
+## 3. Project Overview
+
+1. Results of episode resolution
+
+2. Workflow from data modelling to prediction with the following steps:
+
+# 1. Data Simulation
 
 - The binary recurrence outcome (y as whether an event will recur) is generated based on **risk level**:
   - Risk levels (low, medium, high) are sampled with probabilities: 0.5, 0.3, and 0.2
@@ -24,14 +44,14 @@ The workflow consists of four main steps:
     - first episode end date + gap days (if recurrence occurs)
     - gap days are randomly sampled between 10 and 180 days
 
-### 2. Feature Engineering
+# 2. Feature Engineering
 
 - Risk level is encoded as a numerical variable
 - Episode duration is represented as:
   - a continuous variable, or
   - a categorical variable (short, medium, long)
 
-### 3. Modelling
+# 3. Modelling
 
 - Logistic regression is used to estimate `P(y = 1 | features)`, probability of recurrence
 
@@ -39,7 +59,7 @@ The workflow consists of four main steps:
   - Model A (continuous): `y ~ risk_level + episode1_duration`
   - Model B (categorical): `y ~ risk_level + episode_type`
 
-### 4. Prediction
+# 4. Prediction
 
 - Predicted probabilities are converted into binary outcomes using a threshold:
   - predicted y = 1 if probability ≥ 0.5  
@@ -54,6 +74,32 @@ The modelling results reflect the data generating process:
 
 This demonstrates the importance of understanding whether features carry real predictive information
 
+
+## 4. Architecture/Structure
+
+my_ds_portfolio/portfolio_projects/recurrence_modelling/
+|----- README.md
+|----- data/
+|----- R/
+       |----- load_functions.R
+       |----- load_global_parameters.R
+       |----- load_packages.R
+       |----- run_generate_data.R
+|----- report/
+       |----- model_report_files/ 
+       |----- model_report.qmd
+       |----- model_report.html
+
+## 5. Criteria/Business Rules
+
+## 6. Deployment
+
+## 6. Outputs
+
+## 7 Known Issues/To Do
+R Markdown can knit to Word perfectly fine, but an issue at the moment is Windows (OS) sometimes blocks writing to the .docx file 
+
+## 8. Useful Commands
 
 ## Outputs
 

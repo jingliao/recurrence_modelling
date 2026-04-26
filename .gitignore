@@ -1,5 +1,7 @@
 .Rhistory
 .RData
 .Rproj.user/
-report/*.html
-report/*_files
+report/
+*.html
+*_files
+.positai
