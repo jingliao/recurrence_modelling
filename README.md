@@ -119,4 +119,4 @@ In a production setting, a train-test split (out-of-sample evaluation) would be 
 E.g. use 70% of simulated data for model training and 30% for evaluation.
 
 ## 9. Useful Commands
-  
+The design/ folder is used for demonstration purposes only. It is not part of the project pipeline or workflow.
