@@ -36,6 +36,7 @@ The objectives of this project are:
 ```text
 
 my_ds_portfolio/portfolio_projects/recurrence_modelling/
+|----- recurrence_modelling.Rproj
 |----- README.md
 |----- R/
        |----- load_global_parameters.R
