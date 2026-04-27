@@ -3,17 +3,13 @@
 Project : Incident Episode Recurrence Modelling and Prediction
 Author  : Jing Liao
 Last updated date  : 26-04-2026
-Stakeholders       : humans
+Stakeholders       : les humains
 
 
 ## 1. Purpose
 
-This project demonstrates an end-to-end reporting workflow using R, including data preparation, analysis, and multiple reporting outputs 
-(e.g. html, word file and a Shiny app).
-
-There are two objectives for this project: i) to show results of a proof-of-concept network method to link events recorded across sources as episodes, 
-and ii) to demonstrates an end-to-end modelling workflow for predicting episode recurrence using simulated event data. It is not to build a production-ready model, 
-but to illustrate how modelling decisions relate to the underlying data generating process.
+A modelling focused project that predicts outcomes based on structured event data and that demonstrates end-to-end analytical thinking. 
+It displays pipeline thinking and modelling logic, instead of writing models.
 
 ## 2. Dependencies
 
@@ -23,91 +19,104 @@ but to illustrate how modelling decisions relate to the underlying data generati
 
 ## 3. Project Overview
 
-1. Results of episode resolution
+This modelling project is an extra touch based on an Integrated Data Infrastructure (IDI) project completed at my work and the IDI lab. 
+The IDI project aimed to understand better the incidents of family violence and sexual violence (FVSV) recorded across multiple agencies with data available in the IDI. 
+The IDI data is individual based to connect FVSV events from different agencies. The scope of this IDI work ends up using an innovative approach to link incident events 
+across different sources as incident episodes. Therefore, this modelling project is a semi-continuous work for the linked episode data.
 
-2. Workflow from data modelling to prediction with the following steps:
+The objectives of this project are:
 
-# 1. Data Simulation
-
-- The binary recurrence outcome (y as whether an event will recur) is generated based on **risk level**:
-  - Risk levels (low, medium, high) are sampled with probabilities: 0.5, 0.3, and 0.2
-  - Recurrence probability is determined by risk level:
-    - low: 0.2
-    - medium: 0.4
-    - high: 0.7
-  - The binary outcome is generated using a binomial sampling process with the determined recurrence probability
-
-- Episode duration is generated **randomly and independently**:
-  - First episode start dates are sampled between 01/01/2022 and 31/12/2022
-  - Episode duration ranges from 1 to 10 days
-  - Second episode start dates are defined as:
-    - first episode end date + gap days (if recurrence occurs)
-    - gap days are randomly sampled between 10 and 180 days
-
-# 2. Feature Engineering
-
-- Risk level is encoded as a numerical variable
-- Episode duration is represented as:
-  - a continuous variable, or
-  - a categorical variable (short, medium, long)
-
-# 3. Modelling
-
-- Logistic regression is used to estimate `P(y = 1 | features)`, probability of recurrence
-
-- Two models are compared:
-  - Model A (continuous): `y ~ risk_level + episode1_duration`
-  - Model B (categorical): `y ~ risk_level + episode_type`
-
-# 4. Prediction
-
-- Predicted probabilities are converted into binary outcomes using a threshold:
-  - predicted y = 1 if probability ≥ 0.5  
-  - predicted y = 0 otherwise  
-
-## Key insight
-
-The modelling results reflect the data generating process:
-
-- **Risk level acts as signal** and strongly predicts recurrence  
-- **Episode duration acts as noise**, as it is generated independently from the outcome  
-
-This demonstrates the importance of understanding whether features carry real predictive information
+- to show results of a proof-of-concept network method to link events recorded across sources as episodes using a synthetic data.
+- to demonstrates an end-to-end modelling workflow for prediction of episode recurrence using simulated episode event data. 
+  It is not to build a production-ready model, but to illustrate how modelling decisions relate to the underlying data generating process.
 
 
 ## 4. Architecture/Structure
 
+```text
+
 my_ds_portfolio/portfolio_projects/recurrence_modelling/
 |----- README.md
-|----- data/
 |----- R/
-       |----- load_functions.R
        |----- load_global_parameters.R
        |----- load_packages.R
-       |----- run_generate_data.R
+       |----- func_simulate_data.R
+       |----- func_feature_engineering.R
+       |----- func_model.R
+       |----- poc_episode_resolution.R
 |----- report/
        |----- model_report_files/ 
        |----- model_report.qmd
        |----- model_report.html
+|----- design/
+       |----- pipeline_visualisation.R
+       |----- DAG.html
+       |----- DAG_files
+```
 
 ## 5. Criteria/Business Rules
 
+### Simulated Data
+
+1. The data includes the following variables:
+   - personal identification
+   - risk level of having episode recurrence
+   - recurrence probability
+   - first episode start and end date
+   - second episode start date
+   - a binary recurrence flag (whether the second episode happens within 180 days)
+   
+2. The binary recurrence outcome (Y as whether an event will recur within 180 days) is generated based on **risk level**:
+  - Risk levels (low, medium, high) are independently sampled with probabilities: 0.5, 0.3, and 0.2
+  - Recurrence probability is predefined to connect the risk levels:
+    - low risk level with 0.2 recurrence probability
+    - medium risk with 0.4 recurrence probability
+    - high risk with 0.7 recurrence probability
+  - The binary outcome is generated using a binomial sampling process with the predefined recurrence probability
+
+3. Episode duration is generated **randomly and independently**:
+  - First episode start dates are sampled between 01/01/2022 and 31/12/2022
+  - Episode duration (the difference between first episode start and end date) ranges from 1 to 10 days
+  - Second episode start dates are defined as:
+    - first episode end date + gap days (if recurrence occurs, i.e. Y = 1)
+    - gap days are randomly sampled between 10 and 180 days
+
+### Feature Engineering
+
+1. Risk number (1,2,3) is encoded by risk level from low, medium to high level
+2. Episode type (short, medium, long) is defined based on the first episode duration: within 3 days, between 3 and 6 days, and exceeding 6 days
+3. Risk duration interaction is the product of numeric encoded risk level and first episode duration, e.g. high risk and prolonged event may be more likely to event recurrence
+
+### Modelling
+
+To estimate probability of event recurrence, a logistic regression model is used with the glm family binomial distribution.
+The features considered in the model are risk level and either first episode duration (continuous) or episode type (categorical).
+
+### Prediction
+
+1. According to the model fitting from the modelling process, input the simulated data as new data set to do prediction.
+2. Set a prediction class and relate it to the response variable Y. If the predicted probability is 0.5+, then the recurrence outcome is Yes, otherwise, No
+
+### Model evaluation
+
+Evaluation is to compare what has been observed with what is predicted in the following two aspects:
+
+- Confusion: a table to compare the binary recurrence outcome Y between observations and predictions
+- Accuracy: a proportion of observed Y matched the predicted Y
+- Baseline: a baseline representing the accuracy achieved by a naive model that always predicts the majority class
+
 ## 6. Deployment
 
-## 6. Outputs
+To reproduce the report locally, simply navigate to report/model_report.qmd and render the file, 
+or execute `quarto::quarto_render("report/model_report.qmd")` in the Console in this project directory.
 
-## 7 Known Issues/To Do
-R Markdown can knit to Word perfectly fine, but an issue at the moment is Windows (OS) sometimes blocks writing to the .docx file 
+## 7. Outputs
+Currently only an HTML report is available through quarto.
 
-## 8. Useful Commands
+## 8. Known Issues/To Do
+This is an in-sample prediction, as predictions are generated on the same simulated data used for training. 
+In a production setting, a train-test split (out-of-sample evaluation) would be used to obtain unbiased performance estimates. 
+E.g. use 70% of simulated data for model training and 30% for evaluation.
 
-## Outputs
-
-- HTML report `report/model_report.qmd` consists of:
-  - Visualisation of recurrence patterns  
-  - Model results and interpretation  
-
-## How to Run
-
-1. Open the project in RStudio, `my_ds_portfolio/portfolio_projects/recurrence_modelling/recurrence_modellin.Rproj`
-2. Navigate to the folder `report/model_report.qmd)` and render the report, or simply render the report in the terminal via `quarto::quarto_render("report/model_report.qmd")`
+## 9. Useful Commands
+  
