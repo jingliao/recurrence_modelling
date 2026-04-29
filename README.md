@@ -1,10 +1,13 @@
 # Metadata
 
-Project : Incident Episode Recurrence Modelling and Prediction
-Author  : Jing Liao
-Last updated date  : 26-04-2026
-Stakeholders       : les humains
+```text
 
+Project             : Event Episode Recurrence Modelling and Prediction
+Author              : Jing Liao
+Last updated date   : 26-04-2026
+Stakeholders        : les humains
+
+```
 
 ## 1. Purpose
 
@@ -14,15 +17,15 @@ It displays pipeline thinking and modelling logic, instead of writing models.
 ## 2. Dependencies
 
 - R version 4.5.0
-- Required R packages, details see R/
+- Required R packages, details see `R/`
 
 
 ## 3. Project Overview
 
-This modelling project is an extra touch based on an Integrated Data Infrastructure (IDI) project completed at my work and the IDI lab. 
-The IDI project aimed to understand better the incidents of family violence and sexual violence (FVSV) recorded across multiple agencies with data available in the IDI. 
-The IDI data is individual based to connect FVSV events from different agencies. The scope of this IDI work ends up using an innovative approach to link incident events 
-across different sources as incident episodes. Therefore, this modelling project is a semi-continuous work for the linked episode data.
+This modelling project is an extended work based on an Integrated Data Infrastructure (IDI) project completed at my work and the IDI lab. 
+The IDI project aimed to understand better the events in a specific field recorded across multiple agencies with data available in the IDI. 
+The IDI data is individual based to connect these events from different agencies. The scope of the IDI work ends up using an innovative approach to link events 
+across different sources as episodes. 
 
 The objectives of this project are:
 
@@ -115,7 +118,7 @@ or execute `quarto::quarto_render("report/model_report.qmd")` in the Console in 
 Currently only an HTML report is available through quarto.
 
 ## 8. Known Issues/To Do
-This is an in-sample prediction, as predictions are generated on the same simulated data used for training. 
+This is an **in-sample prediction**, as predictions are generated on the same simulated data used for training. 
 In a production setting, a train-test split (out-of-sample evaluation) would be used to obtain unbiased performance estimates. 
 E.g. use 70% of simulated data for model training and 30% for evaluation.
 
