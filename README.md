@@ -6,11 +6,12 @@ Project             : Event Episode Recurrence Modelling and Prediction
 Author              : Jing Liao
 Last updated date   : 26-04-2026
 Stakeholders        : les humains
+
+```
+
 Quick entry view    : pipeline design, see `design/DAG.html`
                       project summary, see this README
                       example output, see `report/model_report.html`
-
-```
 
 ## 1. Purpose
 
