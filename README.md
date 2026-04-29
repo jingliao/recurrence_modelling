@@ -12,8 +12,8 @@ Stakeholders        : les humains
 # Quick Entry View
 
 - project summary, see this README
-- pipeline design, see `design/DAG.html`
-- example output, see `report/model_report.html`
+- pipeline design, see https://jingliao.github.io/consultation_reporting/design/DAG.html
+- example output, see https://jingliao.github.io/consultation_reporting/report/model_report.html
 
 ## 1. Purpose
 
