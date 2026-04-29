@@ -164,6 +164,8 @@ This is a modelling project that explores how feature representation affects rec
 
 # Supplements
 
+The following Markov episode transition diagram is a proof-of-concept illustrating how events from multi-source data can be linked into episodes. It demonstrates transition probabilities between sources across consecutive episodes, using synthetic data to reflect real-world data challenges. A combined source state (e.g. S1+S2) indicates that events from multiple sources occurred within a defined temporal window and are treated as part of the same episode. 
+
 ```{r}
 
 source(here("R", "poc_episode_resolution.R"))
