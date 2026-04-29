@@ -44,7 +44,7 @@ All data used in this project is fully simulated. The objectives of this project
 
 my_ds_portfolio/portfolio_projects/recurrence_modelling/
 |----- recurrence_modelling.Rproj
-|----- index.md (a landing document for GitHub Page)
+|----- index.md (a landing page to GitHub Page)
 |----- README.md
 |----- R/
        |----- load_global_parameters.R
