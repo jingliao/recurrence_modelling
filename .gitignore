@@ -4,11 +4,18 @@
 .Rproj.user/
 
 # report outputs
-# report/*.html
+report/*.html
 report/*_files/
+
+!report/model_report_files/
+!report/model_report.html
 
 # design outputs
 design/*_files/
+design/*.html
+
+!design/DAG.html
+!design/DAG_files/
 
 # misc
 .positai
