@@ -9,9 +9,11 @@ Stakeholders        : les humains
 
 ```
 
-Quick entry view    : pipeline design, see `design/DAG.html`
-                      project summary, see this README
-                      example output, see `report/model_report.html`
+# Quick Entry View
+
+- project summary, see this README
+- pipeline design, see `design/DAG.html`
+- example output, see `report/model_report.html`
 
 ## 1. Purpose
 
