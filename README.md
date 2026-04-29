@@ -6,13 +6,16 @@ Project             : Event Episode Recurrence Modelling and Prediction
 Author              : Jing Liao
 Last updated date   : 26-04-2026
 Stakeholders        : les humains
+Quick entry view    : pipeline design, see `design/DAG.html
+                      project summary, see this README
+                      example output, see `report/model_report.html
 
 ```
 
 ## 1. Purpose
 
 A modelling focused project that predicts outcomes based on structured event data and that demonstrates end-to-end analytical thinking. 
-It displays pipeline thinking and modelling logic, instead of writing models.
+It focuses on modelling decisions and their relationship to the data generating process, rather than optimising model performance.
 
 ## 2. Dependencies
 
@@ -22,12 +25,10 @@ It displays pipeline thinking and modelling logic, instead of writing models.
 
 ## 3. Project Overview
 
-This modelling project is an extended work based on an Integrated Data Infrastructure (IDI) project completed at my work and the IDI lab. 
-The IDI project aimed to understand better the events in a specific field recorded across multiple agencies with data available in the IDI. 
-The IDI data is individual based to connect these events from different agencies. The scope of the IDI work ends up using an innovative approach to link events 
-across different sources as episodes. 
+This modelling project is an extended work inspired by real-world multi-source event data challenges, 
+where events recorded across different systems need to be linked and analysed.
 
-The objectives of this project are:
+All data used in this project is fully simulated. The objectives of this project are:
 
 - to show results of a proof-of-concept network method to link events recorded across sources as episodes using a synthetic data.
 - to demonstrates an end-to-end modelling workflow for prediction of episode recurrence using simulated episode event data. 
@@ -63,7 +64,7 @@ my_ds_portfolio/portfolio_projects/recurrence_modelling/
 ### Simulated Data
 
 1. The data includes the following variables:
-   - personal identification
+   - synthetic person_id
    - risk level of having episode recurrence
    - recurrence probability
    - first episode start and end date

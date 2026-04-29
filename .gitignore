@@ -1,7 +1,14 @@
+# R session and Studio
 .Rhistory
 .RData
 .Rproj.user/
-report/
-*.html
-*_files
+
+# report outputs
+# report/*.html
+report/*_files/
+
+# design outputs
+design/*_files/
+
+# misc
 .positai
