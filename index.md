@@ -3,7 +3,7 @@
 ## Quick View
 
 - [Pipeline design](https://jingliao.github.io/recurrence_modelling/design/DAG.html)
-- [Example report](https://jingliao.github.io/recurrence_modelling/report/report_quarto.html)
+- [Example report](https://jingliao.github.io/recurrence_modelling/report/model_report.html)
 
 ## About
 
