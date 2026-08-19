@@ -28,7 +28,7 @@ It focuses on modelling decisions and their relationship to the data generating 
 
 ## 3. Project Overview
 
-This modelling project is an extended work inspired by real-world multi-source event data challenges, 
+This modelling project is inspired by real-world multi-source event data challenges, 
 where events recorded across different systems need to be linked and analysed.
 
 All data used in this project is fully simulated. The objectives of this project are:
